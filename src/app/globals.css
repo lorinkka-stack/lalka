@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@layer base {
+  :root {
+    --background: 248 250 252;
+    --foreground: 10 22 40;
+  }
+  .dark {
+    --background: 10 22 40;
+    --foreground: 248 250 252;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-white text-navy-900 antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  * { @apply box-border; }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-solar-500 to-solar-400;
+  }
+  .glass {
+    @apply backdrop-blur-md bg-white/10 border border-white/20;
+  }
+  .glass-dark {
+    @apply backdrop-blur-md bg-navy-900/80 border border-white/10;
+  }
+}
+
+/* Scroll progress bar */
+#scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #22C55E, #4ADE80);
+  z-index: 9999;
+  transition: width 0.1s linear;
+}
+
+/* Solar panel grid pattern */
+.solar-pattern {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Animated underline */
+.hover-underline {
+  position: relative;
+}
+.hover-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 2px;
+  background: #22C55E;
+  transition: width 0.3s ease;
+}
+.hover-underline:hover::after { width: 100%; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0A1628; }
+::-webkit-scrollbar-thumb { background: #22C55E; border-radius: 3px; }
+
+/* Pulse animation for map dots */
+@keyframes mapPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.7; }
+}
+.map-pulse { animation: mapPulse 2s ease-in-out infinite; }
+.map-pulse-delay { animation: mapPulse 2s ease-in-out 0.5s infinite; }
+.map-pulse-delay2 { animation: mapPulse 2s ease-in-out 1s infinite; }
+
+/* Card shine effect */
+.card-shine {
+  position: relative;
+  overflow: hidden;
+}
+.card-shine::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  transition: left 0.6s ease;
+}
+.card-shine:hover::before { left: 150%; }

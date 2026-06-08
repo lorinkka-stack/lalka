@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MODULMONT | Profesionálna montáž fotovoltických konštrukcií</title>
+  <meta name="description" content="MODULMONT je špecializovaná montážna spoločnosť pre výstavbu nosných konštrukcií a osádzanie solárnych panelov. Skúsené tímy pre veľké FV projekty v Nemecku a celej Európe." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ── RESET & BASE ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy-950: #060E1A;
+      --navy-900: #0A1628;
+      --navy-800: #0F2040;
+      --navy-700: #162E55;
+      --navy-600: #1E3F73;
+      --navy-500: #2C5AA0;
+      --navy-100: #D5DDEF;
+      --solar-800: #166534;
+      --solar-700: #15803D;
+      --solar-600: #16A34A;
+      --solar-500: #22C55E;
+      --solar-400: #4ADE80;
+      --solar-300: #86EFAC;
+      --solar-100: #DCFCE7;
+      --solar-50:  #F0FDF4;
+      --white: #FFFFFF;
+      --gray-50: #F8FAFC;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #fff;
+      color: var(--navy-900);
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: inherit; border: none; }
+    img { max-width: 100%; }
+
+    /* ── SCROLL PROGRESS ── */
+    #scroll-progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+      background: linear-gradient(90deg, var(--solar-500), var(--solar-400));
+      z-index: 9999; transition: width 0.1s linear;
+    }
+
+    /* ── UTILITY ── */
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+    .solar-pattern {
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, var(--solar-500), var(--solar-400));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-label {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--solar-600); margin-bottom: 14px;
+    }
+    .section-label::before { content: ''; width: 28px; height: 1px; background: var(--solar-500); }
+    .section-label.light { color: var(--solar-400); }
+    .section-label.light::before { background: var(--solar-400); }
+    .section-title { font-size: clamp(32px, 4.5vw, 56px); font-weight: 800; line-height: 1.1; }
+    .section-title .accent { color: var(--solar-600); }
+
+    /* ── AOS ── */
+    [data-aos] { opacity: 0; transform: translateY(36px); transition: opacity 0.75s ease, transform 0.75s ease; }
+    [data-aos="fade-left"] { transform: translateX(-36px); }
+    [data-aos="fade-right"] { transform: translateX(36px); }
+    [data-aos="scale"] { transform: scale(0.88); }
+    [data-aos].aos-in { opacity: 1 !important; transform: none !important; }
+    [data-aos-delay="1"] { transition-delay: 0.1s; }
+    [data-aos-delay="2"] { transition-delay: 0.2s; }
+    [data-aos-delay="3"] { transition-delay: 0.3s; }
+    [data-aos-delay="4"] { transition-delay: 0.4s; }
+    [data-aos-delay="5"] { transition-delay: 0.5s; }
+    [data-aos-delay="6"] { transition-delay: 0.6s; }
+    [data-aos-delay="7"] { transition-delay: 0.7s; }
+    [data-aos-delay="8"] { transition-delay: 0.8s; }
+
+    /* ══════════════════════════════════
+       NAV
+    ══════════════════════════════════ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      padding: 18px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.35s, padding 0.35s, border-color 0.35s;
+      border-bottom: 1px solid transparent;
+    }
+    .nav.scrolled {
+      background: rgba(10,22,40,0.96);
+      backdrop-filter: blur(16px);
+      padding: 12px 48px;
+      border-color: rgba(255,255,255,0.06);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 20px; font-weight: 800;
+      color: var(--white); letter-spacing: 0.05em;
+    }
+    .nav-logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--solar-500), var(--solar-700));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; box-shadow: 0 0 20px rgba(34,197,94,0.3);
+    }
+    .nav-logo span { color: var(--solar-400); }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      font-size: 13px; font-weight: 500;
+      color: rgba(255,255,255,0.65);
+      transition: color 0.25s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 1.5px;
+      background: var(--solar-500); transition: width 0.3s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--solar-500); color: #fff;
+      font-size: 13px; font-weight: 700;
+      padding: 10px 22px; border-radius: 10px;
+      transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+    .nav-cta:hover {
+      background: var(--solar-400);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(34,197,94,0.35);
+    }
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; padding: 4px;
+    }
+    .hamburger span {
+      width: 24px; height: 2px;
+      background: #fff; border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .mobile-menu {
+      display: none; position: fixed; top: 68px; left: 0; right: 0; z-index: 499;
+      background: rgba(10,22,40,0.98); backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 24px 24px 32px;
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a {
+      display: block; padding: 14px 0;
+      font-size: 16px; font-weight: 500; color: rgba(255,255,255,0.75);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: #fff; }
+    .mobile-menu .mobile-cta {
+      display: flex; justify-content: center; align-items: center; gap: 8px;
+      margin-top: 20px; background: var(--solar-500);
+      color: #fff; font-weight: 700; padding: 14px;
+      border-radius: 12px;
+    }
+
+    /* ══════════════════════════════════
+       HERO
+    ══════════════════════════════════ */
+    .hero {
+      min-height: 100vh;
+      background: var(--navy-950);
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      padding: 130px 48px 80px;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      overflow: hidden; pointer-events: none;
+    }
+    .hero-svg { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(6,14,26,0.55) 0%, rgba(6,14,26,0.25) 40%, rgba(6,14,26,0.85) 100%);
+    }
+    .hero-pattern {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 760px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(34,197,94,0.12);
+      border: 1px solid rgba(34,197,94,0.3);
+      color: var(--solar-400);
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 8px 18px; border-radius: 100px;
+      margin-bottom: 28px;
+    }
+    .hero-title {
+      font-size: clamp(40px, 6vw, 78px);
+      font-weight: 900; line-height: 1.06;
+      color: #fff; letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+    .hero-desc {
+      font-size: 18px; line-height: 1.7;
+      color: rgba(255,255,255,0.6);
+      max-width: 600px; margin-bottom: 40px;
+    }
+    .hero-btns { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 56px; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--solar-500); color: #fff;
+      font-size: 15px; font-weight: 700;
+      padding: 15px 32px; border-radius: 12px;
+      transition: all 0.25s;
+    }
+    .btn-primary:hover {
+      background: var(--solar-400);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(34,197,94,0.4);
+    }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff; font-size: 15px; font-weight: 600;
+      padding: 15px 32px; border-radius: 12px;
+      transition: all 0.25s; backdrop-filter: blur(8px);
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.35); }
+    .hero-stats { display: flex; flex-wrap: wrap; gap: 28px; }
+    .hero-stat { display: flex; align-items: center; gap: 14px; }
+    .hero-stat-divider { width: 1px; height: 40px; background: rgba(34,197,94,0.4); }
+    .hero-stat-val { font-size: 26px; font-weight: 900; color: var(--solar-400); line-height: 1; }
+    .hero-stat-lbl { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 3px; }
+    .hero-scroll {
+      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: rgba(255,255,255,0.35); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    }
+    .hero-scroll-dot {
+      width: 6px; height: 6px; background: var(--solar-500);
+      border-radius: 50%;
+      animation: scrollBounce 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollBounce {
+      0%,100% { transform: translateY(0); opacity: 1; }
+      50% { transform: translateY(10px); opacity: 0.4; }
+    }
+
+    /* ══════════════════════════════════
+       O NÁS
+    ══════════════════════════════════ */
+    .about { padding: 110px 0; background: #fff; }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .about-text p {
+      font-size: 15px; line-height: 1.75;
+      color: #4A5568; margin-bottom: 16px;
+    }
+    .about-text .lead {
+      font-size: 19px; font-weight: 400;
+      color: var(--navy-800); margin-bottom: 20px; line-height: 1.6;
+    }
+    .about-features { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 32px; }
+    .about-feature {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px 16px;
+      border: 1px solid #E2E8F0; border-radius: 12px;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .about-feature:hover { border-color: var(--solar-300); background: var(--solar-50); }
+    .about-feature-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: var(--solar-100);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+      transition: background 0.25s;
+    }
+    .about-feature:hover .about-feature-icon { background: var(--solar-500); }
+    .about-feature strong { display: block; font-size: 13px; font-weight: 600; color: var(--navy-900); }
+    .about-visual { position: relative; }
+    .about-card {
+      background: var(--navy-900); border-radius: 24px;
+      overflow: hidden; aspect-ratio: 4/3;
+      box-shadow: 0 24px 80px rgba(10,22,40,0.25);
+      position: relative;
+    }
+    .about-card-svg { width: 100%; height: 100%; }
+    .about-card-badge {
+      position: absolute; bottom: 20px; left: 20px; right: 20px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 14px; padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .about-badge-label { color: #fff; font-size: 13px; font-weight: 600; }
+    .about-badge-sub { color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 2px; }
+    .about-badge-val { color: var(--solar-400); font-size: 22px; font-weight: 900; }
+    .about-badge-unit { color: rgba(255,255,255,0.4); font-size: 11px; }
+    .about-float {
+      position: absolute; top: -24px; right: -24px;
+      background: #fff; border-radius: 18px;
+      padding: 18px 22px;
+      box-shadow: 0 12px 48px rgba(10,22,40,0.14);
+      border: 1px solid var(--solar-100);
+      animation: floatCard 4s ease-in-out infinite;
+    }
+    @keyframes floatCard {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .about-float-val { font-size: 34px; font-weight: 900; color: var(--solar-600); line-height: 1; }
+    .about-float-lbl { font-size: 11px; color: #718096; margin-top: 4px; }
+
+    /* ══════════════════════════════════
+       SLUŽBY
+    ══════════════════════════════════ */
+    .services {
+      padding: 110px 0;
+      background: var(--navy-950);
+      position: relative;
+    }
+    .services::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .services-header { text-align: center; margin-bottom: 56px; position: relative; z-index: 1; }
+    .services-header .section-label { justify-content: center; }
+    .services-header .section-label::before { display: none; }
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; position: relative; z-index: 1; }
+    .service-card {
+      background: rgba(15,32,64,0.6);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px; padding: 36px 30px;
+      position: relative; overflow: hidden;
+      transition: transform 0.35s, box-shadow 0.35s;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+      transition: left 0.6s;
+    }
+    .service-card:hover::before { left: 150%; }
+    .service-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+    }
+    .service-accent {
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--solar-600), var(--solar-400));
+    }
+    .service-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--solar-700), var(--solar-500));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(34,197,94,0.25);
+    }
+    .service-badge {
+      display: inline-block;
+      background: rgba(34,197,94,0.12);
+      color: var(--solar-400);
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 100px;
+      margin-bottom: 14px;
+    }
+    .service-card h3 { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 12px; }
+    .service-card p { font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.48); margin-bottom: 20px; }
+    .service-list { list-style: none; }
+    .service-list li {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: rgba(255,255,255,0.65);
+      padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .service-list li:last-child { border: none; }
+    .service-list li::before {
+      content: '';
+      width: 16px; height: 16px; flex-shrink: 0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322C55E' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 11.08V12a10 10 0 1 1-5.93-9.14'/%3E%3Cpolyline points='22 4 12 14.01 9 11.01'/%3E%3C/svg%3E") center/contain no-repeat;
+    }
+
+    /* ══════════════════════════════════
+       PREČO MY
+    ══════════════════════════════════ */
+    .why { padding: 110px 0; background: #fff; }
+    .why-header { text-align: center; margin-bottom: 56px; }
+    .why-header .section-label { justify-content: center; }
+    .why-header .section-label::before { display: none; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
+    .stat-card {
+      background: var(--navy-900); border-radius: 20px;
+      padding: 40px 24px; text-align: center;
+      position: relative; overflow: hidden;
+      box-shadow: 0 12px 48px rgba(10,22,40,0.15);
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .stat-card::after {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--solar-500), var(--solar-400));
+    }
+    .stat-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: rgba(34,197,94,0.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin: 0 auto 16px; position: relative; z-index: 1;
+    }
+    .stat-val {
+      font-size: 52px; font-weight: 900;
+      color: var(--solar-400); line-height: 1;
+      position: relative; z-index: 1;
+    }
+    .stat-lbl { font-size: 13px; color: rgba(255,255,255,0.45); margin-top: 8px; position: relative; z-index: 1; }
+    .why-germany {
+      background: linear-gradient(135deg, var(--navy-900), var(--navy-800));
+      border-radius: 18px; padding: 28px 32px;
+      display: flex; align-items: center; gap: 24px;
+      margin-bottom: 32px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .why-germany-icon {
+      width: 60px; height: 60px; flex-shrink: 0;
+      background: rgba(34,197,94,0.15); border-radius: 16px;
+      display: flex; align-items: center; justify-content: center; font-size: 28px;
+    }
+    .why-germany h3 { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .why-germany p { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.6; }
+    .advantages-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .advantage {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 18px;
+      background: var(--solar-50);
+      border: 1px solid var(--solar-100);
+      border-radius: 12px;
+      font-size: 13px; font-weight: 500; color: var(--navy-800);
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .advantage:hover { background: var(--solar-100); border-color: var(--solar-300); }
+    .advantage::before {
+      content: '✓';
+      width: 20px; height: 20px; flex-shrink: 0;
+      background: var(--solar-500); color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 900;
+    }
+
+    /* ══════════════════════════════════
+       PROJEKTY
+    ══════════════════════════════════ */
+    .projects { padding: 110px 0; background: var(--gray-50); }
+    .projects-header { margin-bottom: 48px; }
+    .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .project-card {
+      background: var(--navy-950); border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(10,22,40,0.12);
+      transition: transform 0.35s, box-shadow 0.35s;
+    }
+    .project-card:hover { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(10,22,40,0.22); }
+    .project-visual {
+      height: 210px; position: relative; overflow: hidden;
+      background: var(--navy-900);
+    }
+    .project-visual-inner {
+      position: absolute; inset: 0;
+      display: flex; flex-wrap: wrap; gap: 3px;
+      padding: 14px; align-content: center; justify-content: center;
+    }
+    .project-panel {
+      width: 48px; height: 30px; border-radius: 3px;
+      border: 1px solid; opacity: 0.4;
+      transition: opacity 0.3s;
+    }
+    .project-card:hover .project-panel { opacity: 0.75; }
+    .project-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, var(--navy-950) 0%, transparent 60%);
+    }
+    .project-type {
+      position: absolute; top: 14px; right: 14px;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 5px 12px; border-radius: 100px;
+    }
+    .project-capacity {
+      position: absolute; bottom: 16px; left: 16px;
+    }
+    .project-capacity-val { font-size: 30px; font-weight: 900; line-height: 1; }
+    .project-capacity-lbl { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+    .project-info { padding: 20px; }
+    .project-info h3 {
+      font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 8px;
+      transition: color 0.25s;
+    }
+    .project-card:hover .project-info h3 { color: var(--solar-400); }
+    .project-meta { display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.38); }
+    .project-location { display: flex; align-items: center; gap: 4px; }
+
+    /* ══════════════════════════════════
+       POSTUP
+    ══════════════════════════════════ */
+    .process {
+      padding: 110px 0;
+      background: var(--navy-950);
+      position: relative;
+    }
+    .process::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .process-header { text-align: center; margin-bottom: 56px; position: relative; z-index: 1; }
+    .process-header .section-label { justify-content: center; }
+    .process-header .section-label::before { display: none; }
+    .process-steps {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 0; position: relative; z-index: 1;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute; top: 40px; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(34,197,94,0.1), var(--solar-500), rgba(34,197,94,0.1));
+    }
+    .process-step { text-align: center; padding: 0 16px; }
+    .process-step-circle {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--navy-800);
+      border: 2px solid rgba(34,197,94,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin: 0 auto 20px;
+      box-shadow: 0 0 24px rgba(34,197,94,0.1);
+      position: relative; z-index: 1;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .process-step:hover .process-step-circle {
+      border-color: var(--solar-500);
+      box-shadow: 0 0 32px rgba(34,197,94,0.25);
+    }
+    .process-step-num {
+      font-size: 10px; font-weight: 800;
+      letter-spacing: 0.2em; color: var(--solar-500); margin-bottom: 8px;
+    }
+    .process-step h3 { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+    .process-step p { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.65; }
+
+    /* ══════════════════════════════════
+       REGIÓNY
+    ══════════════════════════════════ */
+    .regions { padding: 110px 0; background: #fff; }
+    .regions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .regions-list { margin-top: 32px; display: flex; flex-direction: column; gap: 10px; }
+    .region-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px; border-radius: 12px;
+      border: 1px solid;
+      transition: all 0.25s;
+    }
+    .region-item.primary {
+      background: var(--solar-50); border-color: var(--solar-200);
+      box-shadow: 0 2px 8px rgba(34,197,94,0.08);
+    }
+    .region-item.secondary { background: #F8FAFC; border-color: #E2E8F0; }
+    .region-item.secondary:hover { border-color: var(--solar-200); background: var(--solar-50); }
+    .region-left { display: flex; align-items: center; gap: 12px; }
+    .region-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .region-dot.primary { background: var(--solar-500); box-shadow: 0 0 10px rgba(34,197,94,0.5); }
+    .region-dot.secondary { background: #CBD5E0; }
+    .region-name { font-size: 14px; font-weight: 600; color: var(--navy-900); }
+    .region-badge {
+      font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 100px;
+    }
+    .region-badge.primary { background: var(--solar-500); color: #fff; }
+    .region-badge.secondary { background: #EDF2F7; color: #718096; }
+    .map-container {
+      background: var(--navy-950); border-radius: 24px;
+      padding: 24px; box-shadow: 0 20px 80px rgba(10,22,40,0.2);
+      position: relative; overflow: hidden;
+    }
+    .map-container::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .map-container svg { position: relative; z-index: 1; }
+
+    /* ══════════════════════════════════
+       CTA BANNER
+    ══════════════════════════════════ */
+    .cta-banner {
+      padding: 90px 48px;
+      background: linear-gradient(135deg, var(--solar-700) 0%, var(--solar-600) 50%, var(--solar-800) 100%);
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .cta-banner::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(0,0,0,0.15), transparent, rgba(0,0,0,0.15));
+    }
+    .cta-content { position: relative; z-index: 1; }
+    .cta-banner h2 { font-size: clamp(30px, 4vw, 52px); font-weight: 900; color: #fff; margin-bottom: 16px; line-height: 1.15; }
+    .cta-banner p { font-size: 18px; color: rgba(255,255,255,0.8); margin-bottom: 40px; }
+    .cta-btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
+    .btn-white {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: #fff; color: var(--solar-700);
+      font-size: 15px; font-weight: 800;
+      padding: 16px 36px; border-radius: 12px;
+      transition: all 0.25s;
+    }
+    .btn-white:hover { background: var(--solar-50); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.2); }
+    .btn-outline-white {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.12);
+      border: 1.5px solid rgba(255,255,255,0.35);
+      color: #fff; font-size: 15px; font-weight: 600;
+      padding: 16px 32px; border-radius: 12px;
+      backdrop-filter: blur(8px);
+      transition: all 0.25s;
+    }
+    .btn-outline-white:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.6); }
+
+    /* ══════════════════════════════════
+       KONTAKT
+    ══════════════════════════════════ */
+    .contact { padding: 110px 0; background: var(--navy-950); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+    .contact-desc { font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.45); margin-bottom: 40px; }
+    .contact-items { display: flex; flex-direction: column; gap: 20px; margin-bottom: 40px; }
+    .contact-item { display: flex; align-items: center; gap: 16px; transition: all 0.25s; }
+    .contact-item:hover { transform: translateX(4px); }
+    .contact-item-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--navy-800);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+      transition: background 0.25s;
+    }
+    .contact-item:hover .contact-item-icon { background: var(--solar-500); }
+    .contact-item-lbl { font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 2px; }
+    .contact-item-val { font-size: 14px; color: #fff; font-weight: 500; }
+    .socials { display: flex; gap: 12px; }
+    .social-btn {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.55); font-size: 13px; font-weight: 600;
+      padding: 10px 18px; border-radius: 10px;
+      transition: all 0.25s;
+    }
+    .social-btn:hover { background: var(--solar-500); color: #fff; border-color: var(--solar-500); }
+    /* Form */
+    .contact-form-box {
+      background: rgba(15,32,64,0.5);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px; padding: 36px;
+    }
+    .contact-form-box h3 { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 28px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(255,255,255,0.35); margin-bottom: 8px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      background: rgba(15,32,64,0.7);
+      border: 1.5px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 13px 16px;
+      color: #fff; font-family: inherit; font-size: 14px;
+      outline: none; transition: border-color 0.25s, background 0.25s;
+      appearance: none;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(255,255,255,0.2); }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--solar-500);
+      background: rgba(15,32,64,0.9);
+    }
+    .form-group select option { background: var(--navy-900); }
+    .form-group textarea { resize: vertical; }
+    .form-submit {
+      width: 100%; background: var(--solar-500); color: #fff;
+      font-size: 15px; font-weight: 700; padding: 15px;
+      border-radius: 12px; border: none;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: all 0.25s; cursor: pointer;
+    }
+    .form-submit:hover { background: var(--solar-400); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(34,197,94,0.35); }
+    .form-success {
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+      padding: 60px 20px; text-align: center;
+    }
+    .form-success.show { display: flex; }
+    .form-success-icon {
+      width: 64px; height: 64px; background: rgba(34,197,94,0.15);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin-bottom: 20px;
+    }
+    .form-success h4 { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .form-success p { font-size: 14px; color: rgba(255,255,255,0.45); }
+
+    /* ══════════════════════════════════
+       FOOTER
+    ══════════════════════════════════ */
+    .footer { background: #040B14; padding: 70px 0 32px; border-top: 1px solid rgba(255,255,255,0.04); }
+    .footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .footer-logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--solar-500), var(--solar-700)); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .footer-logo-name { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: 0.05em; }
+    .footer-logo-name span { color: var(--solar-400); }
+    .footer-desc { font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.35); max-width: 260px; margin-bottom: 24px; }
+    .footer-socials { display: flex; gap: 10px; }
+    .footer-social { width: 36px; height: 36px; background: rgba(255,255,255,0.05); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.25s; }
+    .footer-social:hover { background: var(--solar-500); transform: translateY(-2px); }
+    .footer-col h4 { font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 18px; }
+    .footer-col a { display: block; font-size: 13px; color: rgba(255,255,255,0.35); margin-bottom: 10px; transition: color 0.25s; }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.04); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: rgba(255,255,255,0.2); }
+    .footer-bottom-links { display: flex; gap: 24px; }
+    .footer-bottom-links a { color: rgba(255,255,255,0.2); transition: color 0.2s; }
+    .footer-bottom-links a:hover { color: rgba(255,255,255,0.5); }
+
+    /* ══════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .about-grid, .regions-grid, .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+      .services-grid, .projects-grid { grid-template-columns: 1fr 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .advantages-grid { grid-template-columns: 1fr 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .process-steps { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+      .process-steps::before { display: none; }
+    }
+    @media (max-width: 768px) {
+      .nav { padding: 16px 20px; }
+      .nav.scrolled { padding: 12px 20px; }
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .hero { padding: 110px 20px 60px; }
+      .container { padding: 0 20px; }
+      .about-float { display: none; }
+      .services-grid, .projects-grid, .stats-grid { grid-template-columns: 1fr; }
+      .advantages-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .cta-banner { padding: 60px 20px; }
+      .hero-title { font-size: clamp(32px, 8vw, 52px); }
+    }
+    @media (max-width: 480px) {
+      .process-steps { grid-template-columns: 1fr; }
+      .hero-stats { flex-direction: column; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+
+<!-- ── NAV ── -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">☀</div>
+    MODUL<span>MONT</span>
+  </a>
+  <div class="nav-links">
+    <a href="#o-nas">O nás</a>
+    <a href="#sluzby">Služby</a>
+    <a href="#preco-my">Prečo my</a>
+    <a href="#projekty">Projekty</a>
+    <a href="#kontakt">Kontakt</a>
+  </div>
+  <a href="#kontakt" class="nav-cta">Kontaktovať nás →</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#o-nas" onclick="closeMobile()">O nás</a>
+  <a href="#sluzby" onclick="closeMobile()">Služby</a>
+  <a href="#preco-my" onclick="closeMobile()">Prečo my</a>
+  <a href="#projekty" onclick="closeMobile()">Projekty</a>
+  <a href="#kontakt" onclick="closeMobile()">Kontakt</a>
+  <a href="#kontakt" class="mobile-cta" onclick="closeMobile()">Kontaktovať nás →</a>
+</div>
+
+<!-- ── HERO ── -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <svg class="hero-svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="hSky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#040B14"/>
+          <stop offset="100%" stop-color="#0F2040"/>
+        </linearGradient>
+        <linearGradient id="hGround" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0D1F0D"/>
+          <stop offset="100%" stop-color="#060E06"/>
+        </linearGradient>
+        <linearGradient id="hPanel" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#1B3A6B"/>
+          <stop offset="100%" stop-color="#0F2040"/>
+        </linearGradient>
+        <linearGradient id="hShine" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.12)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+        </linearGradient>
+      </defs>
+      <rect width="1440" height="900" fill="url(#hSky)"/>
+      <!-- Stars -->
+      <g fill="white">
+        <circle cx="120" cy="60" r="1.5" opacity="0.4"/>
+        <circle cx="280" cy="40" r="1" opacity="0.3"/>
+        <circle cx="450" cy="80" r="1.5" opacity="0.5"/>
+        <circle cx="620" cy="30" r="1" opacity="0.35"/>
+        <circle cx="800" cy="55" r="1.5" opacity="0.4"/>
+        <circle cx="960" cy="20" r="1" opacity="0.3"/>
+        <circle cx="1100" cy="70" r="1.5" opacity="0.45"/>
+        <circle cx="1280" cy="45" r="1" opacity="0.35"/>
+        <circle cx="1380" cy="90" r="1.5" opacity="0.4"/>
+        <circle cx="200" cy="130" r="1" opacity="0.25"/>
+        <circle cx="500" cy="110" r="1.5" opacity="0.35"/>
+        <circle cx="750" cy="140" r="1" opacity="0.3"/>
+        <circle cx="1050" cy="100" r="1.5" opacity="0.4"/>
+        <circle cx="1350" cy="130" r="1" opacity="0.25"/>
+      </g>
+      <!-- Moon glow -->
+      <circle cx="1260" cy="90" r="40" fill="#FEF3C7" opacity="0.06"/>
+      <circle cx="1260" cy="90" r="26" fill="#FDE68A" opacity="0.1"/>
+      <circle cx="1260" cy="90" r="16" fill="#FDE68A" opacity="0.18"/>
+      <!-- Horizon glow -->
+      <ellipse cx="720" cy="560" rx="900" ry="80" fill="rgba(34,197,94,0.05)"/>
+      <!-- Ground -->
+      <rect y="560" width="1440" height="340" fill="url(#hGround)"/>
+      <rect y="556" width="1440" height="6" fill="rgba(34,197,94,0.12)"/>
+      <!-- Perspective lines -->
+      <g stroke="rgba(34,197,94,0.05)" stroke-width="1">
+        <line x1="720" y1="562" x2="0" y2="900"/>
+        <line x1="720" y1="562" x2="240" y2="900"/>
+        <line x1="720" y1="562" x2="480" y2="900"/>
+        <line x1="720" y1="562" x2="960" y2="900"/>
+        <line x1="720" y1="562" x2="1200" y2="900"/>
+        <line x1="720" y1="562" x2="1440" y2="900"/>
+        <line x1="0" y1="650" x2="1440" y2="650"/>
+        <line x1="0" y1="720" x2="1440" y2="720"/>
+        <line x1="0" y1="800" x2="1440" y2="800"/>
+      </g>
+      <!-- Panel rows - back (small) -->
+      <g fill="url(#hPanel)" stroke="rgba(34,197,94,0.25)" stroke-width="0.6">
+        <!-- Row 1 - very back -->
+        <rect x="20" y="568" width="44" height="22" rx="1"/><rect x="72" y="568" width="44" height="22" rx="1"/><rect x="124" y="568" width="44" height="22" rx="1"/><rect x="176" y="568" width="44" height="22" rx="1"/><rect x="228" y="568" width="44" height="22" rx="1"/><rect x="280" y="568" width="44" height="22" rx="1"/><rect x="332" y="568" width="44" height="22" rx="1"/><rect x="384" y="568" width="44" height="22" rx="1"/><rect x="436" y="568" width="44" height="22" rx="1"/><rect x="488" y="568" width="44" height="22" rx="1"/><rect x="540" y="568" width="44" height="22" rx="1"/><rect x="592" y="568" width="44" height="22" rx="1"/><rect x="644" y="568" width="44" height="22" rx="1"/><rect x="696" y="568" width="44" height="22" rx="1"/><rect x="748" y="568" width="44" height="22" rx="1"/><rect x="800" y="568" width="44" height="22" rx="1"/><rect x="852" y="568" width="44" height="22" rx="1"/><rect x="904" y="568" width="44" height="22" rx="1"/><rect x="956" y="568" width="44" height="22" rx="1"/><rect x="1008" y="568" width="44" height="22" rx="1"/><rect x="1060" y="568" width="44" height="22" rx="1"/><rect x="1112" y="568" width="44" height="22" rx="1"/><rect x="1164" y="568" width="44" height="22" rx="1"/><rect x="1216" y="568" width="44" height="22" rx="1"/><rect x="1268" y="568" width="44" height="22" rx="1"/><rect x="1320" y="568" width="44" height="22" rx="1"/><rect x="1372" y="568" width="44" height="22" rx="1"/>
+        <!-- Row 2 -->
+        <rect x="0" y="600" width="56" height="28" rx="1.5"/><rect x="62" y="600" width="56" height="28" rx="1.5"/><rect x="124" y="600" width="56" height="28" rx="1.5"/><rect x="186" y="600" width="56" height="28" rx="1.5"/><rect x="248" y="600" width="56" height="28" rx="1.5"/><rect x="310" y="600" width="56" height="28" rx="1.5"/><rect x="372" y="600" width="56" height="28" rx="1.5"/><rect x="434" y="600" width="56" height="28" rx="1.5"/><rect x="496" y="600" width="56" height="28" rx="1.5"/><rect x="558" y="600" width="56" height="28" rx="1.5"/><rect x="620" y="600" width="56" height="28" rx="1.5"/><rect x="682" y="600" width="56" height="28" rx="1.5"/><rect x="744" y="600" width="56" height="28" rx="1.5"/><rect x="806" y="600" width="56" height="28" rx="1.5"/><rect x="868" y="600" width="56" height="28" rx="1.5"/><rect x="930" y="600" width="56" height="28" rx="1.5"/><rect x="992" y="600" width="56" height="28" rx="1.5"/><rect x="1054" y="600" width="56" height="28" rx="1.5"/><rect x="1116" y="600" width="56" height="28" rx="1.5"/><rect x="1178" y="600" width="56" height="28" rx="1.5"/><rect x="1240" y="600" width="56" height="28" rx="1.5"/><rect x="1302" y="600" width="56" height="28" rx="1.5"/><rect x="1364" y="600" width="56" height="28" rx="1.5"/>
+        <!-- Row 3 - bigger -->
+        <rect x="0" y="644" width="72" height="38" rx="2"/><rect x="78" y="644" width="72" height="38" rx="2"/><rect x="156" y="644" width="72" height="38" rx="2"/><rect x="234" y="644" width="72" height="38" rx="2"/><rect x="312" y="644" width="72" height="38" rx="2"/><rect x="390" y="644" width="72" height="38" rx="2"/><rect x="468" y="644" width="72" height="38" rx="2"/><rect x="546" y="644" width="72" height="38" rx="2"/><rect x="624" y="644" width="72" height="38" rx="2"/><rect x="702" y="644" width="72" height="38" rx="2"/><rect x="780" y="644" width="72" height="38" rx="2"/><rect x="858" y="644" width="72" height="38" rx="2"/><rect x="936" y="644" width="72" height="38" rx="2"/><rect x="1014" y="644" width="72" height="38" rx="2"/><rect x="1092" y="644" width="72" height="38" rx="2"/><rect x="1170" y="644" width="72" height="38" rx="2"/><rect x="1248" y="644" width="72" height="38" rx="2"/><rect x="1326" y="644" width="72" height="38" rx="2"/>
+        <!-- Row 4 - foreground -->
+        <rect x="0" y="702" width="96" height="52" rx="2.5"/><rect x="104" y="702" width="96" height="52" rx="2.5"/><rect x="208" y="702" width="96" height="52" rx="2.5"/><rect x="312" y="702" width="96" height="52" rx="2.5"/><rect x="416" y="702" width="96" height="52" rx="2.5"/><rect x="520" y="702" width="96" height="52" rx="2.5"/><rect x="624" y="702" width="96" height="52" rx="2.5"/><rect x="728" y="702" width="96" height="52" rx="2.5"/><rect x="832" y="702" width="96" height="52" rx="2.5"/><rect x="936" y="702" width="96" height="52" rx="2.5"/><rect x="1040" y="702" width="96" height="52" rx="2.5"/><rect x="1144" y="702" width="96" height="52" rx="2.5"/><rect x="1248" y="702" width="96" height="52" rx="2.5"/><rect x="1352" y="702" width="80" height="52" rx="2.5"/>
+      </g>
+      <!-- Panel shine overlay -->
+      <g fill="url(#hShine)" opacity="0.6">
+        <rect x="0" y="702" width="96" height="52" rx="2.5"/>
+        <rect x="208" y="702" width="96" height="52" rx="2.5"/>
+        <rect x="416" y="702" width="96" height="52" rx="2.5"/>
+        <rect x="624" y="702" width="96" height="52" rx="2.5"/>
+      </g>
+      <!-- Support posts -->
+      <g stroke="rgba(80,120,80,0.5)" stroke-width="2">
+        <line x1="48" y1="754" x2="48" y2="785"/>
+        <line x1="152" y1="754" x2="152" y2="785"/>
+        <line x1="256" y1="754" x2="256" y2="785"/>
+        <line x1="360" y1="754" x2="360" y2="785"/>
+        <line x1="464" y1="754" x2="464" y2="785"/>
+        <line x1="568" y1="754" x2="568" y2="785"/>
+        <line x1="672" y1="754" x2="672" y2="785"/>
+        <line x1="776" y1="754" x2="776" y2="785"/>
+        <line x1="880" y1="754" x2="880" y2="785"/>
+        <line x1="984" y1="754" x2="984" y2="785"/>
+        <line x1="1088" y1="754" x2="1088" y2="785"/>
+        <line x1="1192" y1="754" x2="1192" y2="785"/>
+        <line x1="1296" y1="754" x2="1296" y2="785"/>
+      </g>
+      <!-- Energy glow -->
+      <ellipse cx="720" cy="780" rx="700" ry="30" fill="rgba(34,197,94,0.04)"/>
+      <!-- Gradient fade left side (for text readability) -->
+      <defs>
+        <linearGradient id="hFade" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="rgba(4,11,20,0.7)"/>
+          <stop offset="55%" stop-color="rgba(4,11,20,0)"/>
+          <stop offset="100%" stop-color="rgba(4,11,20,0.3)"/>
+        </linearGradient>
+      </defs>
+      <rect width="1440" height="900" fill="url(#hFade)"/>
+    </svg>
+    <div class="hero-overlay"></div>
+    <div class="hero-pattern"></div>
+  </div>
+
+  <div class="hero-content" data-aos>
+    <div class="hero-badge" data-aos data-aos-delay="1">
+      ⚡ Profesionálny montážny partner
+    </div>
+    <h1 class="hero-title" data-aos data-aos-delay="2">
+      Profesionálna montáž
+      <span class="gradient-text">fotovoltických</span>
+      konštrukcií a solárnych panelov
+    </h1>
+    <p class="hero-desc" data-aos data-aos-delay="3">
+      Skúsené montážne tímy pre veľké fotovoltické projekty v Nemecku a celej Európe. Precíznosť, spoľahlivosť a najvyššie bezpečnostné štandardy.
+    </p>
+    <div class="hero-btns" data-aos data-aos-delay="4">
+      <a href="#kontakt" class="btn-primary">Kontaktovať nás →</a>
+      <a href="#projekty" class="btn-secondary">Naše realizácie</a>
+    </div>
+    <div class="hero-stats" data-aos data-aos-delay="5">
+      <div class="hero-stat">
+        <div class="hero-stat-divider"></div>
+        <div>
+          <div class="hero-stat-val" data-count="10" data-suffix="+">0</div>
+          <div class="hero-stat-lbl">rokov skúseností</div>
+        </div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-divider"></div>
+        <div>
+          <div class="hero-stat-val" data-count="100" data-suffix="+">0</div>
+          <div class="hero-stat-lbl">projektov</div>
+        </div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-divider"></div>
+        <div>
+          <div class="hero-stat-val" data-count="500" data-suffix=" MW+">0</div>
+          <div class="hero-stat-lbl">namontovanej kapacity</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-dot"></div>
+  </div>
+</section>
+
+<!-- ── O NÁS ── -->
+<section class="about" id="o-nas">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text">
+        <div class="section-label" data-aos="fade-left">O spoločnosti</div>
+        <h2 class="section-title" data-aos data-aos-delay="1">Kto sme</h2>
+        <p class="lead" data-aos data-aos-delay="2">MODULMONT je spoľahlivý partner pre výstavbu fotovoltických elektrární.</p>
+        <p data-aos data-aos-delay="3">Špecializujeme sa na montáž nosných konštrukcií a osádzanie fotovoltických modulov na pozemných aj strešných projektoch. Vďaka skúsenostiam z nemeckého trhu dokážeme zabezpečiť efektívnu realizáciu projektov pri zachovaní najvyšších štandardov kvality a bezpečnosti.</p>
+        <p data-aos data-aos-delay="4">Naše tímy pracujú podľa prísnych európskych predpisov a sú pripravené na projekty akéhokoľvek rozsahu — od stredných komerčných inštalácií až po utility-scale solárne parky.</p>
+        <div class="about-features" data-aos data-aos-delay="5">
+          <div class="about-feature">
+            <div class="about-feature-icon">🛡</div>
+            <div><strong>Certifikované postupy</strong></div>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-icon">🏆</div>
+            <div><strong>Kvalifikované tímy</strong></div>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-icon">⏱</div>
+            <div><strong>Dodržiavanie termínov</strong></div>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-icon">🌍</div>
+            <div><strong>Celá Európa</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="about-visual" data-aos="fade-right">
+        <div class="about-float">
+          <div class="about-float-val">500+</div>
+          <div class="about-float-lbl">MW namontovanej<br>kapacity</div>
+        </div>
+        <div class="about-card">
+          <svg class="about-card-svg" viewBox="0 0 600 450" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="acGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1E3A5F"/>
+                <stop offset="100%" stop-color="#0A1628"/>
+              </linearGradient>
+            </defs>
+            <rect width="600" height="450" fill="url(#acGrad)"/>
+            <g fill="rgba(30,58,96,0.7)" stroke="rgba(34,197,94,0.2)" stroke-width="0.8">
+              <rect x="20" y="40" width="60" height="38" rx="2"/><rect x="90" y="40" width="60" height="38" rx="2"/><rect x="160" y="40" width="60" height="38" rx="2"/><rect x="230" y="40" width="60" height="38" rx="2"/><rect x="300" y="40" width="60" height="38" rx="2"/><rect x="370" y="40" width="60" height="38" rx="2"/><rect x="440" y="40" width="60" height="38" rx="2"/><rect x="510" y="40" width="72" height="38" rx="2"/>
+              <rect x="20" y="94" width="60" height="38" rx="2"/><rect x="90" y="94" width="60" height="38" rx="2"/><rect x="160" y="94" width="60" height="38" rx="2"/><rect x="230" y="94" width="60" height="38" rx="2"/><rect x="300" y="94" width="60" height="38" rx="2"/><rect x="370" y="94" width="60" height="38" rx="2"/><rect x="440" y="94" width="60" height="38" rx="2"/><rect x="510" y="94" width="72" height="38" rx="2"/>
+              <rect x="20" y="148" width="60" height="38" rx="2"/><rect x="90" y="148" width="60" height="38" rx="2"/><rect x="160" y="148" width="60" height="38" rx="2"/><rect x="230" y="148" width="60" height="38" rx="2"/><rect x="300" y="148" width="60" height="38" rx="2"/><rect x="370" y="148" width="60" height="38" rx="2"/><rect x="440" y="148" width="60" height="38" rx="2"/><rect x="510" y="148" width="72" height="38" rx="2"/>
+              <rect x="20" y="202" width="60" height="38" rx="2"/><rect x="90" y="202" width="60" height="38" rx="2"/><rect x="160" y="202" width="60" height="38" rx="2"/><rect x="230" y="202" width="60" height="38" rx="2"/><rect x="300" y="202" width="60" height="38" rx="2"/><rect x="370" y="202" width="60" height="38" rx="2"/><rect x="440" y="202" width="60" height="38" rx="2"/><rect x="510" y="202" width="72" height="38" rx="2"/>
+            </g>
+            <!-- Workers -->
+            <g fill="rgba(255,255,255,0.12)">
+              <circle cx="180" cy="326" r="12"/><rect x="172" y="338" width="16" height="22" rx="3"/>
+              <circle cx="300" cy="320" r="12"/><rect x="292" y="332" width="16" height="22" rx="3"/>
+              <circle cx="420" cy="324" r="12"/><rect x="412" y="336" width="16" height="22" rx="3"/>
+            </g>
+            <!-- Hard hats -->
+            <g fill="#FDE68A" opacity="0.5">
+              <ellipse cx="180" cy="318" rx="14" ry="6"/>
+              <ellipse cx="300" cy="312" rx="14" ry="6"/>
+              <ellipse cx="420" cy="316" rx="14" ry="6"/>
+            </g>
+            <ellipse cx="300" cy="420" rx="280" ry="16" fill="rgba(34,197,94,0.06)"/>
+          </svg>
+          <div class="about-card-badge">
+            <div>
+              <div class="about-badge-label">Utility-Scale montáž</div>
+              <div class="about-badge-sub">Nemecko · 2024</div>
+            </div>
+            <div>
+              <div class="about-badge-val">48 MW</div>
+              <div class="about-badge-unit">kapacita</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SLUŽBY ── -->
+<section class="services" id="sluzby">
+  <div class="container">
+    <div class="services-header">
+      <div class="section-label light" data-aos>Čo robíme</div>
+      <h2 class="section-title" style="color:#fff;" data-aos data-aos-delay="1">Naše služby</h2>
+      <p style="color:rgba(255,255,255,0.45);margin-top:12px;font-size:15px;" data-aos data-aos-delay="2">Komplexné montážne riešenia od konštrukcií až po finálnu inštaláciu panelov.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card" data-aos data-aos-delay="1">
+        <div class="service-accent"></div>
+        <div class="service-icon">🏗</div>
+        <div class="service-badge">Konštrukcie</div>
+        <h3>Výstavba nosných konštrukcií</h3>
+        <p>Profesionálna montáž oceľových a hliníkových nosných systémov pre pozemné aj strešné FV elektrárne s presnosťou podľa projektovej dokumentácie.</p>
+        <ul class="service-list">
+          <li>Montáž oceľových a hliníkových systémov</li>
+          <li>Pozemné fotovoltické elektrárne</li>
+          <li>Strešné fotovoltické systémy</li>
+          <li>Kotviace systémy</li>
+        </ul>
+      </div>
+      <div class="service-card" data-aos data-aos-delay="2">
+        <div class="service-accent" style="background:linear-gradient(90deg,#15803D,#22C55E);"></div>
+        <div class="service-icon">☀</div>
+        <div class="service-badge">Panely</div>
+        <h3>Osádzanie solárnych panelov</h3>
+        <p>Kvalifikovaná montáž fotovoltických modulov vrátane zarovnania, upevnenia a kontroly kvality každého panela podľa špecifikácií výrobcu.</p>
+        <ul class="service-list">
+          <li>Profesionálna montáž FV modulov</li>
+          <li>Zarovnanie a upevnenie panelov</li>
+          <li>Kontrola kvality montáže</li>
+          <li>Práca podľa projektovej dokumentácie</li>
+        </ul>
+      </div>
+      <div class="service-card" data-aos data-aos-delay="3">
+        <div class="service-accent" style="background:linear-gradient(90deg,#0F2040,#2C5AA0);"></div>
+        <div class="service-icon">👷</div>
+        <div class="service-badge">Tímy</div>
+        <h3>Montážne tímy pre veľké projekty</h3>
+        <p>Flexibilné kapacity pre utility-scale projekty. Koordinujeme veľké tímy s dôrazom na bezpečnosť, efektivitu a dodržiavanie harmonogramov.</p>
+        <ul class="service-list">
+          <li>Flexibilné kapacity tímov</li>
+          <li>Skúsenosti s utility-scale projektmi</li>
+          <li>Práca v Nemecku a EÚ</li>
+          <li>Dodržiavanie harmonogramov</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PREČO MY ── -->
+<section class="why" id="preco-my">
+  <div class="container">
+    <div class="why-header">
+      <div class="section-label" data-aos>Prečo nás</div>
+      <h2 class="section-title" data-aos data-aos-delay="1">Prečo si vybrať <span class="accent">MODULMONT</span></h2>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card" data-aos data-aos-delay="1">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-val" data-count="10" data-suffix="+">0</div>
+        <div class="stat-lbl">rokov skúseností</div>
+      </div>
+      <div class="stat-card" data-aos data-aos-delay="2">
+        <div class="stat-icon">📊</div>
+        <div class="stat-val" data-count="100" data-suffix="+">0</div>
+        <div class="stat-lbl">úspešných projektov</div>
+      </div>
+      <div class="stat-card" data-aos data-aos-delay="3">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-val" data-count="500" data-suffix=" MW+">0</div>
+        <div class="stat-lbl">namontovanej kapacity</div>
+      </div>
+    </div>
+    <div class="why-germany" data-aos data-aos-delay="2">
+      <div class="why-germany-icon">🇩🇪</div>
+      <div>
+        <h3>Nemecko — hlavný trh pôsobenia</h3>
+        <p>Viac ako dekáda skúseností na náročnom nemeckom trhu. Plná znalosť miestnych noriem, technických predpisov a pracovných štandardov.</p>
+      </div>
+    </div>
+    <div class="advantages-grid" data-aos data-aos-delay="3">
+      <div class="advantage">Skúsenosti z nemeckého trhu</div>
+      <div class="advantage">Kvalifikované a certifikované tímy</div>
+      <div class="advantage">Dôraz na bezpečnosť práce (BOZP)</div>
+      <div class="advantage">Dodržiavanie termínov</div>
+      <div class="advantage">Vysoká kvalita realizácie</div>
+      <div class="advantage">Flexibilita pri veľkých projektoch</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROJEKTY ── -->
+<section class="projects" id="projekty">
+  <div class="container">
+    <div class="projects-header">
+      <div class="section-label" data-aos="fade-left">Portfólio</div>
+      <h2 class="section-title" data-aos data-aos-delay="1">Naše projekty</h2>
+      <p style="color:#718096;margin-top:12px;" data-aos data-aos-delay="2">Výber z realizovaných projektov v Nemecku a Európe.</p>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card" data-aos data-aos-delay="1">
+        <div class="project-visual" style="background:linear-gradient(135deg,#0F2040,#060E1A);">
+          <div class="project-visual-inner" id="panels1"></div>
+          <div class="project-overlay"></div>
+          <div class="project-type" style="background:rgba(34,197,94,0.2);color:#22C55E;border:1px solid rgba(34,197,94,0.3);">Utility-Scale</div>
+          <div class="project-capacity">
+            <div class="project-capacity-val" style="color:#22C55E;">48 MW</div>
+            <div class="project-capacity-lbl">inštalovanej kapacity</div>
+          </div>
+        </div>
+        <div class="project-info">
+          <h3>Pozemná elektráreň Nemecko</h3>
+          <div class="project-meta">
+            <span class="project-location">📍 Severné Nemecko</span>
+            <span>2024</span>
+          </div>
+        </div>
+      </div>
+      <div class="project-card" data-aos data-aos-delay="2">
+        <div class="project-visual" style="background:linear-gradient(135deg,#162E55,#0A1628);">
+          <div class="project-visual-inner" id="panels2"></div>
+          <div class="project-overlay"></div>
+          <div class="project-type" style="background:rgba(74,222,128,0.2);color:#4ADE80;border:1px solid rgba(74,222,128,0.3);">Ground Mount</div>
+          <div class="project-capacity">
+            <div class="project-capacity-val" style="color:#4ADE80;">32 MW</div>
+            <div class="project-capacity-lbl">inštalovanej kapacity</div>
+          </div>
+        </div>
+        <div class="project-info">
+          <h3>Solárny park Bavorsko</h3>
+          <div class="project-meta">
+            <span class="project-location">📍 Bayern, Nemecko</span>
+            <span>2023</span>
+          </div>
+        </div>
+      </div>
+      <div class="project-card" data-aos data-aos-delay="3">
+        <div class="project-visual" style="background:linear-gradient(135deg,#0A1628,#060E1A);">
+          <div class="project-visual-inner" id="panels3"></div>
+          <div class="project-overlay"></div>
+          <div class="project-type" style="background:rgba(134,239,172,0.2);color:#86EFAC;border:1px solid rgba(134,239,172,0.3);">Rooftop</div>
+          <div class="project-capacity">
+            <div class="project-capacity-val" style="color:#86EFAC;">8 MW</div>
+            <div class="project-capacity-lbl">inštalovanej kapacity</div>
+          </div>
+        </div>
+        <div class="project-info">
+          <h3>Strešná inštalácia priemyselnej haly</h3>
+          <div class="project-meta">
+            <span class="project-location">📍 Düsseldorf, DE</span>
+            <span>2024</span>
+          </div>
+        </div>
+      </div>
+      <div class="project-card" data-aos data-aos-delay="1">
+        <div class="project-visual" style="background:linear-gradient(135deg,#162E55,#0F2040);">
+          <div class="project-visual-inner" id="panels4"></div>
+          <div class="project-overlay"></div>
+          <div class="project-type" style="background:rgba(34,197,94,0.2);color:#22C55E;border:1px solid rgba(34,197,94,0.3);">Utility-Scale</div>
+          <div class="project-capacity">
+            <div class="project-capacity-val" style="color:#22C55E;">72 MW</div>
+            <div class="project-capacity-lbl">inštalovanej kapacity</div>
+          </div>
+        </div>
+        <div class="project-info">
+          <h3>Utility-Scale projekt</h3>
+          <div class="project-meta">
+            <span class="project-location">📍 Sasko, Nemecko</span>
+            <span>2023</span>
+          </div>
+        </div>
+      </div>
+      <div class="project-card" data-aos data-aos-delay="2">
+        <div class="project-visual" style="background:linear-gradient(135deg,#060E1A,#0F2040);">
+          <div class="project-visual-inner" id="panels5"></div>
+          <div class="project-overlay"></div>
+          <div class="project-type" style="background:rgba(74,222,128,0.2);color:#4ADE80;border:1px solid rgba(74,222,128,0.3);">Commercial</div>
+          <div class="project-capacity">
+            <div class="project-capacity-val" style="color:#4ADE80;">4.5 MW</div>
+            <div class="project-capacity-lbl">inštalovanej kapacity</div>
+          </div>
+        </div>
+        <div class="project-info">
+          <h3>Komerčný FV systém</h3>
+          <div class="project-meta">
+            <span class="project-location">📍 Praha, ČR</span>
+            <span>2024</span>
+          </div>
+        </div>
+      </div>
+      <div class="project-card" data-aos data-aos-delay="3">
+        <div class="project-visual" style="background:linear-gradient(135deg,#0F2040,#162E55);">
+          <div class="project-visual-inner" id="panels6"></div>
+          <div class="project-overlay"></div>
+          <div class="project-type" style="background:rgba(134,239,172,0.2);color:#86EFAC;border:1px solid rgba(134,239,172,0.3);">Ground Mount</div>
+          <div class="project-capacity">
+            <div class="project-capacity-val" style="color:#86EFAC;">56 MW</div>
+            <div class="project-capacity-lbl">inštalovanej kapacity</div>
+          </div>
+        </div>
+        <div class="project-info">
+          <h3>Fotovoltický park Európa</h3>
+          <div class="project-meta">
+            <span class="project-location">📍 Holandsko</span>
+            <span>2023</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── POSTUP ── -->
+<section class="process">
+  <div class="container">
+    <div class="process-header">
+      <div class="section-label light" data-aos>Metodológia</div>
+      <h2 class="section-title" style="color:#fff;" data-aos data-aos-delay="1">Ako pracujeme</h2>
+      <p style="color:rgba(255,255,255,0.45);margin-top:12px;" data-aos data-aos-delay="2">Overený päťkrokový proces pre každý projekt.</p>
+    </div>
+    <div class="process-steps">
+      <div class="process-step" data-aos data-aos-delay="1">
+        <div class="process-step-circle">📋</div>
+        <div class="process-step-num">01</div>
+        <h3>Príprava projektu</h3>
+        <p>Analýza dokumentácie, plánovanie zdrojov, koordinácia s dodávateľom.</p>
+      </div>
+      <div class="process-step" data-aos data-aos-delay="2">
+        <div class="process-step-circle">🔧</div>
+        <div class="process-step-num">02</div>
+        <h3>Montáž konštrukcií</h3>
+        <p>Presná inštalácia nosných oceľových a hliníkových konštrukcií.</p>
+      </div>
+      <div class="process-step" data-aos data-aos-delay="3">
+        <div class="process-step-circle">☀</div>
+        <div class="process-step-num">03</div>
+        <h3>Osádzanie panelov</h3>
+        <p>Profesionálne upevnenie a zarovnanie fotovoltických modulov.</p>
+      </div>
+      <div class="process-step" data-aos data-aos-delay="4">
+        <div class="process-step-circle">✅</div>
+        <div class="process-step-num">04</div>
+        <h3>Kontrola kvality</h3>
+        <p>Systematická kontrola každej časti inštalácie a overenie súladu.</p>
+      </div>
+      <div class="process-step" data-aos data-aos-delay="5">
+        <div class="process-step-circle">🏆</div>
+        <div class="process-step-num">05</div>
+        <h3>Odovzdanie projektu</h3>
+        <p>Finálna prehliadka, dokumentácia a odovzdanie hotového diela.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REGIÓNY ── -->
+<section class="regions">
+  <div class="container">
+    <div class="regions-grid">
+      <div>
+        <div class="section-label" data-aos="fade-left">Pôsobenie</div>
+        <h2 class="section-title" data-aos data-aos-delay="1">Kde pôsobíme</h2>
+        <p style="color:#718096;margin-top:16px;line-height:1.7;" data-aos data-aos-delay="2">
+          Naše montážne tímy sú pripravené realizovať projekty po celej Európe s hlavným zameraním na Nemecko. Máme skúsenosti s miestnou legislatívou a technickými normami vo všetkých regiónoch.
+        </p>
+        <div class="regions-list" data-aos data-aos-delay="3">
+          <div class="region-item primary">
+            <div class="region-left"><div class="region-dot primary"></div><div class="region-name">Nemecko</div></div>
+            <div class="region-badge primary">Hlavný trh</div>
+          </div>
+          <div class="region-item secondary">
+            <div class="region-left"><div class="region-dot secondary"></div><div class="region-name">Rakúsko</div></div>
+            <div class="region-badge secondary">Aktívni</div>
+          </div>
+          <div class="region-item secondary">
+            <div class="region-left"><div class="region-dot secondary"></div><div class="region-name">Česká republika</div></div>
+            <div class="region-badge secondary">Aktívni</div>
+          </div>
+          <div class="region-item secondary">
+            <div class="region-left"><div class="region-dot secondary"></div><div class="region-name">Slovensko</div></div>
+            <div class="region-badge secondary">Sídlo spoločnosti</div>
+          </div>
+          <div class="region-item secondary">
+            <div class="region-left"><div class="region-dot secondary"></div><div class="region-name">Holandsko</div></div>
+            <div class="region-badge secondary">Aktívni</div>
+          </div>
+          <div class="region-item secondary">
+            <div class="region-left"><div class="region-dot secondary"></div><div class="region-name">Belgicko</div></div>
+            <div class="region-badge secondary">Aktívni</div>
+          </div>
+        </div>
+      </div>
+      <div class="map-container" data-aos="fade-right">
+        <svg viewBox="160 80 340 280" xmlns="http://www.w3.org/2000/svg">
+          <!-- Europe shapes -->
+          <g fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8">
+            <path d="M185 215 L225 205 L235 225 L220 255 L195 250 Z"/>
+            <path d="M225 170 L265 163 L280 180 L270 210 L240 215 L225 200 Z"/>
+            <path d="M230 130 L250 123 L255 140 L240 148 L228 145 Z"/>
+            <path d="M218 118 L235 112 L237 126 L222 130 Z"/>
+            <path d="M253 140 L270 135 L275 153 L258 158 Z"/>
+            <path d="M270 135 L320 132 L333 155 L325 185 L295 195 L275 180 L270 157 Z"/>
+            <path d="M290 112 L310 106 L315 124 L295 130 Z"/>
+            <path d="M280 85 L335 80 L365 105 L355 140 L325 132 L295 112 L285 100 Z"/>
+            <path d="M333 132 L385 126 L400 150 L390 173 L360 177 L333 160 Z"/>
+            <path d="M320 183 L385 177 L400 193 L380 205 L345 203 L320 195 Z"/>
+            <path d="M320 193 L380 205 L400 220 L385 233 L340 230 L315 215 Z"/>
+            <path d="M265 207 L305 205 L320 215 L315 255 L295 275 L275 260 L260 233 Z"/>
+            <path d="M340 230 L400 223 L415 255 L395 280 L360 275 L340 250 Z"/>
+            <path d="M345 110 L400 100 L415 125 L400 150 L375 143 L350 133 Z"/>
+            <path d="M355 265 L395 260 L400 285 L375 300 L353 290 Z"/>
+          </g>
+          <!-- Germany highlight -->
+          <path d="M270 135 L320 132 L333 155 L325 185 L295 195 L275 180 L270 157 Z"
+            fill="rgba(34,197,94,0.22)" stroke="rgba(34,197,94,0.55)" stroke-width="1.5"/>
+          <!-- Markers -->
+          <!-- Germany -->
+          <circle cx="297" cy="163" r="10" fill="rgba(34,197,94,0.15)">
+            <animate attributeName="r" values="10;16;10" dur="2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.15;0.05;0.15" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="297" cy="163" r="6" fill="#22C55E" stroke="white" stroke-width="1.5"/>
+          <text x="308" y="167" font-size="7" fill="white" font-weight="700">Nemecko</text>
+          <!-- Austria -->
+          <circle cx="325" cy="208" r="4" fill="#4ADE80" stroke="rgba(255,255,255,0.5)" stroke-width="1" opacity="0.85"/>
+          <text x="333" y="212" font-size="5.5" fill="rgba(255,255,255,0.65)">Rakúsko</text>
+          <!-- Czech -->
+          <circle cx="340" cy="178" r="4" fill="#4ADE80" stroke="rgba(255,255,255,0.5)" stroke-width="1" opacity="0.85"/>
+          <text x="348" y="182" font-size="5.5" fill="rgba(255,255,255,0.65)">Česká rep.</text>
+          <!-- Slovakia -->
+          <circle cx="368" cy="192" r="4" fill="#4ADE80" stroke="rgba(255,255,255,0.5)" stroke-width="1" opacity="0.85"/>
+          <text x="376" y="196" font-size="5.5" fill="rgba(255,255,255,0.65)">Slovensko</text>
+          <!-- Netherlands -->
+          <circle cx="263" cy="145" r="4" fill="#4ADE80" stroke="rgba(255,255,255,0.5)" stroke-width="1" opacity="0.85"/>
+          <text x="271" y="149" font-size="5.5" fill="rgba(255,255,255,0.65)">Holandsko</text>
+          <!-- Belgium -->
+          <circle cx="249" cy="158" r="4" fill="#4ADE80" stroke="rgba(255,255,255,0.5)" stroke-width="1" opacity="0.85"/>
+          <text x="257" y="162" font-size="5.5" fill="rgba(255,255,255,0.65)">Belgicko</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA BANNER ── -->
+<div class="cta-banner">
+  <div class="cta-content">
+    <h2 data-aos>Hľadáte spoľahlivého<br>montážneho partnera?</h2>
+    <p data-aos data-aos-delay="1">Kontaktujte nás a prediskutujme váš fotovoltický projekt.</p>
+    <div class="cta-btns" data-aos data-aos-delay="2">
+      <a href="#kontakt" class="btn-white">Vyžiadať ponuku →</a>
+      <a href="tel:+421900000000" class="btn-outline-white">📞 Zavolajte nám</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── KONTAKT ── -->
+<section class="contact" id="kontakt">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <div class="section-label light" data-aos="fade-left">Kontakt</div>
+        <h2 class="section-title" style="color:#fff;" data-aos data-aos-delay="1">Kontaktujte nás</h2>
+        <p class="contact-desc" data-aos data-aos-delay="2">Sme pripravení prediskutovať váš projekt. Ozvite sa nám a do 24 hodín sa vám ozveme späť.</p>
+        <div class="contact-items" data-aos data-aos-delay="3">
+          <a href="tel:+421900000000" class="contact-item">
+            <div class="contact-item-icon">📞</div>
+            <div>
+              <div class="contact-item-lbl">Telefón</div>
+              <div class="contact-item-val">+421 XXX XXX XXX</div>
+            </div>
+          </a>
+          <a href="mailto:info@modulmont.eu" class="contact-item">
+            <div class="contact-item-icon">✉</div>
+            <div>
+              <div class="contact-item-lbl">Email</div>
+              <div class="contact-item-val">info@modulmont.eu</div>
+            </div>
+          </a>
+          <div class="contact-item">
+            <div class="contact-item-icon">📍</div>
+            <div>
+              <div class="contact-item-lbl">Lokalita</div>
+              <div class="contact-item-val">Slovensko / Nemecko</div>
+            </div>
+          </div>
+        </div>
+        <div class="socials" data-aos data-aos-delay="4">
+          <a href="#" class="social-btn">in LinkedIn</a>
+          <a href="#" class="social-btn">f Facebook</a>
+        </div>
+      </div>
+      <div data-aos="fade-right">
+        <div class="contact-form-box">
+          <h3>Vyžiadať ponuku</h3>
+          <form id="contact-form" onsubmit="submitForm(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Meno a priezvisko</label>
+                <input type="text" placeholder="Meno a priezvisko" required>
+              </div>
+              <div class="form-group">
+                <label>Spoločnosť</label>
+                <input type="text" placeholder="Vaša spoločnosť">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" placeholder="vas@email.com" required>
+            </div>
+            <div class="form-group">
+              <label>Typ projektu</label>
+              <select>
+                <option value="">Vyberte typ projektu</option>
+                <option>Pozemná elektráreň</option>
+                <option>Strešná inštalácia</option>
+                <option>Utility-scale projekt</option>
+                <option>Komerčný projekt</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Kapacita projektu (MW)</label>
+              <input type="text" placeholder="napr. 10 MW">
+            </div>
+            <div class="form-group">
+              <label>Správa</label>
+              <textarea rows="4" placeholder="Opíšte váš projekt a požiadavky..."></textarea>
+            </div>
+            <button type="submit" class="form-submit">Odoslať požiadavku →</button>
+          </form>
+          <div class="form-success" id="form-success">
+            <div class="form-success-icon">✅</div>
+            <h4>Správa odoslaná!</h4>
+            <p>Ozveme sa vám do 24 hodín.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">
+          <div class="footer-logo-icon">☀</div>
+          <div class="footer-logo-name">MODUL<span>MONT</span></div>
+        </div>
+        <p class="footer-desc">Profesionálny partner pre montáž fotovoltických konštrukcií a solárnych panelov v Nemecku a celej Európe.</p>
+        <div class="footer-socials">
+          <a href="#" class="footer-social">in</a>
+          <a href="#" class="footer-social">f</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Spoločnosť</h4>
+        <a href="#o-nas">O nás</a>
+        <a href="#sluzby">Služby</a>
+        <a href="#projekty">Projekty</a>
+        <a href="#kontakt">Kariéra</a>
+      </div>
+      <div class="footer-col">
+        <h4>Služby</h4>
+        <a href="#sluzby">Nosné konštrukcie</a>
+        <a href="#sluzby">Osádzanie panelov</a>
+        <a href="#sluzby">Utility-scale</a>
+        <a href="#sluzby">Strešné systémy</a>
+      </div>
+      <div class="footer-col">
+        <h4>Kontakt</h4>
+        <a href="tel:+421900000000">+421 XXX XXX XXX</a>
+        <a href="mailto:info@modulmont.eu">info@modulmont.eu</a>
+        <a href="#">Slovensko</a>
+        <a href="#">Nemecko</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 MODULMONT. Všetky práva vyhradené.</span>
+      <div class="footer-bottom-links">
+        <a href="#">Ochrana osobných údajov</a>
+        <a href="#">Podmienky použitia</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Scroll progress bar
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  document.getElementById('scroll-progress').style.width = pct + '%';
+}, { passive: true });
+
+// ── Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
+
+// ── Hamburger
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('mobile-menu').classList.toggle('open');
+});
+function closeMobile() {
+  document.getElementById('mobile-menu').classList.remove('open');
+}
+
+// ── AOS
+const aosEls = document.querySelectorAll('[data-aos]');
+const aosObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('aos-in'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+aosEls.forEach(el => aosObs.observe(el));
+
+// ── Counter animation
+function animateCount(el) {
+  const target = +el.dataset.count;
+  const suffix = el.dataset.suffix || '';
+  const dur = 1800;
+  const start = performance.now();
+  const run = now => {
+    const p = Math.min((now - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.floor(ease * target) + (p === 1 ? suffix : '');
+    if (p < 1) requestAnimationFrame(run);
+  };
+  requestAnimationFrame(run);
+}
+const countEls = document.querySelectorAll('[data-count]');
+const countObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCount(e.target); countObs.unobserve(e.target); } });
+}, { threshold: 0.5 });
+countEls.forEach(el => countObs.observe(el));
+
+// ── Project panel grid generation
+['panels1','panels2','panels3','panels4','panels5','panels6'].forEach((id, idx) => {
+  const colors = ['#22C55E','#4ADE80','#86EFAC','#22C55E','#4ADE80','#86EFAC'];
+  const c = colors[idx];
+  const container = document.getElementById(id);
+  if (!container) return;
+  for (let i = 0; i < 30; i++) {
+    const d = document.createElement('div');
+    d.className = 'project-panel';
+    d.style.borderColor = c + '40';
+    d.style.backgroundColor = c + '12';
+    container.appendChild(d);
+  }
+});
+
+// ── Form submit
+function submitForm(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.form-submit');
+  btn.textContent = 'Odosielam...';
+  btn.disabled = true;
+  setTimeout(() => {
+    document.getElementById('contact-form').style.display = 'none';
+    const suc = document.getElementById('form-success');
+    suc.classList.add('show');
+    setTimeout(() => {
+      suc.classList.remove('show');
+      document.getElementById('contact-form').style.display = 'block';
+      btn.textContent = 'Odoslať požiadavku →';
+      btn.disabled = false;
+      e.target.reset();
+    }, 5000);
+  }, 1200);
+}
+
+// ── Card hover tilt
+document.querySelectorAll('.service-card, .project-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const dx = (e.clientX - r.left - r.width/2) / (r.width/2);
+    const dy = (e.clientY - r.top - r.height/2) / (r.height/2);
+    card.style.transform = `translateY(-8px) rotateX(${-dy*4}deg) rotateY(${dx*4}deg)`;
+    card.style.transition = 'transform 0.1s';
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.transition = 'transform 0.4s ease';
+  });
+});
+
+// ── Page load fade in
+document.body.style.opacity = '0';
+document.body.style.transition = 'opacity 0.5s ease';
+window.addEventListener('load', () => { document.body.style.opacity = '1'; });
+</script>
+</body>
+</html>
